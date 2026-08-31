@@ -3,226 +3,455 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Templo Árvore da Vida ⚡ React</title>
+    <title>Templo Árvore da Vida ⚡ Igreja Espiritual</title>
+    <meta name="description" content="Templo Árvore da Vida - Santuário de paz, meditação e cura espiritual."/>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     
-    <!-- React & ReactDOM via CDN -->
+    <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
     <!-- React Router DOM -->
     <script src="https://unpkg.com/react-router-dom@6/umd/react-router-dom.production.min.js"></script>
 
-    <!-- Babel pour JSX -->
+    <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        /* ----- STYLES GLOBAUX ----- */
+        /* ============================================================
+           STYLES COMPLETS
+           ============================================================ */
+        :root {
+            --primary: #1a3a2b;
+            --primary-light: #2a5a3a;
+            --gold: #b8946a;
+            --gold-light: #d4b48c;
+            --cream: #f7f3eb;
+            --cream-dark: #e8dfd3;
+            --text: #2e241f;
+            --text-light: #5a4a3f;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --radius: 16px;
+            --transition: 0.3s ease;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', 'Georgia', serif;
-            background: #f7f3eb;
-            color: #2e241f;
-            line-height: 1.6;
+            background: var(--cream);
+            color: var(--text);
+            line-height: 1.7;
             min-height: 100vh;
+            transition: background var(--transition), color var(--transition);
         }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        body.dark-mode {
+            --cream: #1a1a1a;
+            --cream-dark: #2a2a2a;
+            --text: #f0ebe3;
+            --text-light: #c5bdb5;
+            --white: #2a2a2a;
+            --shadow: 0 4px 20px rgba(0,0,0,0.4);
+            background: #1a1a1a;
+            color: #f0ebe3;
+        }
 
-        /* ----- HEADER ----- */
+        body.dark-mode .card,
+        body.dark-mode .horaires-box,
+        body.dark-mode .temoin-item,
+        body.dark-mode .equipe-card,
+        body.dark-mode .article-card {
+            background: #2a2a2a;
+            color: #f0ebe3;
+        }
+
+        body.dark-mode header {
+            background: linear-gradient(135deg, #0d1f15, #1a3a2b);
+        }
+
+        body.dark-mode nav {
+            background: #0d1f15;
+        }
+
+        body.dark-mode .banniere {
+            background: #2a2a2a;
+        }
+
+        body.dark-mode form input,
+        body.dark-mode form textarea {
+            background: #333;
+            color: #f0ebe3;
+            border-color: #555;
+        }
+
+        body.dark-mode .newsletter-box {
+            background: #0d1f15;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* HEADER */
         header {
-            background: linear-gradient(135deg, #1a3a2b, #2a5a3a);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: #f5efe6;
-            padding: 25px 0 15px;
+            padding: 16px 0 12px;
             text-align: center;
-            border-bottom: 6px solid #b8946a;
+            border-bottom: 6px solid var(--gold);
+            position: relative;
         }
 
         header .logo {
-            font-size: 2.8rem;
+            font-size: 2.4rem;
             font-weight: 300;
             letter-spacing: 3px;
             cursor: pointer;
         }
 
-        header .logo i { color: #d4b48c; margin-right: 12px; }
+        header .logo i {
+            color: var(--gold-light);
+            margin-right: 12px;
+        }
 
         header .sous-titre {
             font-style: italic;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #d4c5b2;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
-        /* ----- NAVIGATION (React Router) ----- */
+        .header-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .lang-toggle {
+            background: rgba(255,255,255,0.12);
+            border: 2px solid var(--gold);
+            color: #f5efe6;
+            padding: 6px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .lang-toggle:hover {
+            background: var(--gold);
+            color: var(--primary);
+        }
+
+        .lang-toggle .active-lang {
+            background: var(--gold);
+            color: var(--primary);
+            padding: 0 8px;
+            border-radius: 12px;
+        }
+
+        .theme-toggle {
+            background: rgba(255,255,255,0.12);
+            border: 2px solid var(--gold);
+            color: #f5efe6;
+            padding: 6px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--gold);
+            color: var(--primary);
+        }
+
+        /* NAVIGATION */
         nav {
-            background: #2e4a3a;
-            padding: 14px 0;
-            text-align: center;
-            border-bottom: 2px solid #b8946a;
+            background: var(--primary-light);
+            padding: 10px 0;
+            border-bottom: 2px solid var(--gold);
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 8px 20px;
+            gap: 4px 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         nav button {
             background: transparent;
             border: none;
             color: #f0ebe3;
-            font-size: 1.05rem;
+            font-size: 0.92rem;
             font-weight: 500;
             cursor: pointer;
-            padding: 6px 14px;
+            padding: 5px 14px;
             border-radius: 30px;
-            transition: 0.3s;
+            transition: var(--transition);
             font-family: inherit;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
-        nav button:hover { background: rgba(255,255,255,0.08); color: #e4c9a7; }
-        nav button.active { background: #b8946a; color: #1a1a1a; }
+        nav button:hover {
+            background: rgba(255,255,255,0.08);
+            color: var(--gold-light);
+        }
 
-        /* ----- CONTENU PRINCIPAL ----- */
+        nav button.active {
+            background: var(--gold);
+            color: var(--primary);
+        }
+
+        /* MAIN */
         main {
-            min-height: 70vh;
-            padding: 40px 0 30px;
+            min-height: 65vh;
+            padding: 30px 0 20px;
         }
 
-        /* ----- CARTES / COMPOSANTS ----- */
+        /* BANNIÈRE */
+        .banniere {
+            background: linear-gradient(135deg, var(--cream-dark) 0%, #d4c5b2 100%);
+            padding: 45px 25px 40px;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 28px;
+            transition: background var(--transition);
+        }
+
+        .banniere h1 {
+            font-size: 2.6rem;
+            color: var(--primary);
+            font-weight: 300;
+        }
+
+        .banniere h1 i {
+            color: #6a8f6a;
+            margin-right: 12px;
+        }
+
+        .banniere p {
+            font-size: 1.15rem;
+            color: var(--text);
+            max-width: 700px;
+            margin: 10px auto 20px;
+        }
+
+        /* CARTES */
         .card {
-            background: #fffffffa;
-            padding: 28px 24px;
-            border-radius: 16px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-            border-left: 6px solid #b8946a;
-            margin-bottom: 24px;
-            transition: 0.3s;
+            background: var(--white);
+            padding: 24px 22px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-left: 6px solid var(--gold);
+            margin-bottom: 22px;
+            transition: transform var(--transition), box-shadow var(--transition);
         }
 
-        .card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.08); }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
 
         .card h3 {
-            font-size: 1.4rem;
-            color: #1a3a2b;
-            margin-bottom: 12px;
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
-        .card h3 i { color: #6a8f6a; font-size: 1.6rem; }
+        .card h3 i {
+            color: #6a8f6a;
+            font-size: 1.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
 
         .grid-3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 24px;
-            margin-top: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 22px;
+            margin-top: 14px;
         }
 
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-top: 14px;
+        }
+
+        /* BOUTONS */
         .btn {
             display: inline-block;
-            background: #1a3a2b;
+            background: var(--primary);
             color: #f5efe6;
-            padding: 12px 32px;
+            padding: 11px 30px;
             border-radius: 50px;
-            border: 2px solid #b8946a;
+            border: 2px solid var(--gold);
             font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
+            transition: var(--transition);
             font-family: inherit;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            text-decoration: none;
+            text-align: center;
         }
 
-        .btn:hover { background: #b8946a; color: #1a1a1a; transform: scale(1.03); }
+        .btn:hover {
+            background: var(--gold);
+            color: var(--primary);
+            transform: scale(1.03);
+        }
 
         .btn-outline {
             background: transparent;
-            color: #1a3a2b;
-            border: 2px solid #1a3a2b;
+            color: var(--primary);
+            border: 2px solid var(--primary);
         }
 
-        .btn-outline:hover { background: #1a3a2b; color: #fff; }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
 
-        /* ----- FORMULAIRE ----- */
-        form { max-width: 550px; margin: 0 auto; }
-        form input, form textarea {
+        .btn-gold {
+            background: var(--gold);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-gold:hover {
+            background: var(--primary);
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        /* FORMULAIRES */
+        form {
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        form input,
+        form textarea,
+        form select {
             width: 100%;
-            padding: 14px 18px;
-            margin-bottom: 14px;
+            padding: 13px 16px;
+            margin-bottom: 12px;
             border: 2px solid #ddd6cc;
             border-radius: 12px;
             font-size: 1rem;
             font-family: inherit;
             background: #fcfaf7;
-            transition: 0.3s;
+            transition: var(--transition);
         }
 
-        form input:focus, form textarea:focus {
+        form input:focus,
+        form textarea:focus,
+        form select:focus {
             outline: none;
             border-color: #6a8f6a;
             box-shadow: 0 0 0 4px rgba(106, 143, 106, 0.15);
         }
 
-        form input.error { border-color: #c0392b; }
-        .error-msg { color: #c0392b; font-size: 0.85rem; margin-top: -10px; margin-bottom: 12px; display: block; }
-
-        /* ----- HORAIRES ----- */
-        .horaires-box {
-            background: #e8dfd3;
-            padding: 28px 30px;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid #d4c5b2;
-            max-width: 600px;
-            margin: 0 auto;
+        form input.error {
+            border-color: #c0392b;
         }
 
-        .horaires-box p { font-size: 1.15rem; margin: 8px 0; }
-        .horaires-box .jour { font-weight: 700; color: #1a3a2b; }
+        .error-msg {
+            color: #c0392b;
+            font-size: 0.85rem;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: block;
+        }
 
-        /* ----- COMPTEUR / INTERACTIF ----- */
+        /* HORAIRES */
+        .horaires-box {
+            background: var(--cream-dark);
+            padding: 25px 28px;
+            border-radius: var(--radius);
+            text-align: center;
+            border: 1px solid #d4c5b2;
+            max-width: 650px;
+            margin: 0 auto;
+            transition: background var(--transition);
+        }
+
+        .horaires-box p {
+            font-size: 1.05rem;
+            margin: 7px 0;
+        }
+
+        .horaires-box .jour {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* COMPTEUR */
         .compteur-box {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 16px;
-            padding: 20px;
+            gap: 14px;
+            padding: 22px;
         }
 
         .compteur-box .nombre {
-            font-size: 4rem;
+            font-size: 3.8rem;
             font-weight: 300;
-            color: #1a3a2b;
-            background: #e8dfd3;
-            padding: 10px 40px;
+            color: var(--primary);
+            background: var(--cream-dark);
+            padding: 8px 40px;
             border-radius: 60px;
-            min-width: 120px;
+            min-width: 110px;
             text-align: center;
         }
 
         .compteur-box .btn-group {
             display: flex;
-            gap: 14px;
+            gap: 12px;
             flex-wrap: wrap;
             justify-content: center;
         }
 
-        /* ----- TÉMOIGNAGES ----- */
+        /* TÉMOIGNAGES */
         .temoin-item {
-            background: #f7f3eb;
-            padding: 16px 20px;
+            background: var(--cream);
+            padding: 12px 16px;
             border-radius: 12px;
-            border-left: 4px solid #b8946a;
-            margin-bottom: 12px;
+            border-left: 4px solid var(--gold);
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: background var(--transition);
         }
 
         .temoin-item button {
@@ -230,293 +459,260 @@
             border: none;
             color: #a05252;
             cursor: pointer;
-            font-size: 1.2rem;
-            transition: 0.3s;
+            font-size: 1.1rem;
+            transition: var(--transition);
         }
 
-        .temoin-item button:hover { color: #c0392b; transform: scale(1.2); }
+        .temoin-item button:hover {
+            color: #c0392b;
+            transform: scale(1.15);
+        }
 
-        /* ----- FOOTER ----- */
-        footer {
-            background: #1a3a2b;
-            color: #d4c5b2;
+        /* GALERIE */
+        .galerie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+        }
+
+        .galerie-item {
+            background: var(--cream-dark);
+            border-radius: var(--radius);
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            color: var(--gold);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+            padding: 10px;
             text-align: center;
-            padding: 28px 20px;
-            border-top: 4px solid #b8946a;
-            margin-top: 20px;
         }
 
-        footer .social a {
-            color: #d4c5b2;
-            margin: 0 14px;
-            font-size: 1.7rem;
-            transition: 0.3s;
-            display: inline-block;
+        .galerie-item:hover {
+            transform: scale(1.03);
+            border-color: var(--gold);
         }
 
-        footer .social a:hover { color: #e4c9a7; transform: scale(1.1); }
-
-        /* ----- RESPONSIVE ----- */
-        @media (max-width: 700px) {
-            header .logo { font-size: 2rem; }
-            nav button { font-size: 0.9rem; padding: 4px 10px; }
-            .compteur-box .nombre { font-size: 2.8rem; padding: 8px 24px; }
+        .galerie-item span {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 6px;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* ÉQUIPE */
+        .equipe-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
         }
 
-        .fade-in { animation: fadeIn 0.4s ease forwards; }
+        .equipe-card:hover {
+            transform: translateY(-4px);
+        }
 
-        /* Badge / notification */
+        .equipe-card .avatar {
+            font-size: 3.5rem;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .equipe-card h4 {
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .equipe-card .role {
+            color: var(--text-light);
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+
+        /* BLOG */
+        .article-card {
+            background: var(--white);
+            padding: 18px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border-bottom: 4px solid var(--gold);
+        }
+
+        .article-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .article-card .date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* NEWSLETTER */
+        .newsletter-box {
+            background: var(--primary);
+            color: #f5efe6;
+            padding: 35px 28px;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+
+        .newsletter-box input {
+            max-width: 350px;
+            margin-right: 8px;
+        }
+
+        .newsletter-box .btn {
+            background: var(--gold);
+            color: var(--primary);
+            border-color: var(--gold);
+        }
+
+        .newsletter-box .btn:hover {
+            background: #fff;
+            color: var(--primary);
+        }
+
+        /* BADGE */
         .badge {
-            background: #b8946a;
-            color: #1a1a1a;
+            background: var(--gold);
+            color: var(--primary);
             padding: 2px 12px;
             border-radius: 30px;
             font-size: 0.75rem;
             font-weight: 700;
             margin-left: 6px;
         }
+
+        /* FOOTER */
+        footer {
+            background: var(--primary);
+            color: #d4c5b2;
+            text-align: center;
+            padding: 30px 20px 22px;
+            border-top: 4px solid var(--gold);
+            margin-top: 28px;
+        }
+
+        footer .social a {
+            color: #d4c5b2;
+            margin: 0 12px;
+            font-size: 1.5rem;
+            transition: var(--transition);
+            display: inline-block;
+        }
+
+        footer .social a:hover {
+            color: var(--gold-light);
+            transform: scale(1.1);
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            header .logo {
+                font-size: 1.6rem;
+            }
+
+            .banniere h1 {
+                font-size: 1.8rem;
+            }
+
+            nav button {
+                font-size: 0.8rem;
+                padding: 4px 10px;
+            }
+
+            .compteur-box .nombre {
+                font-size: 2.4rem;
+                padding: 6px 20px;
+            }
+
+            .header-controls {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .galerie-grid {
+                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            }
+
+            .newsletter-box input {
+                max-width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 <body>
-
-    <!-- ===== RACINE REACT ===== -->
     <div id="root"></div>
 
-    <!-- ===== SCRIPT REACT ===== -->
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-        const { BrowserRouter, Routes, Route, Link, useNavigate, useLocation } = window.ReactRouterDOM;
-
-        // ----- CONTEXTE GLOBAL (pour partager l'état entre les pages) -----
-        const AppContext = React.createContext();
-
-        // ----- COMPOSANT PRINCIPAL -----
-        function App() {
-            // État global : compteur de prières
-            const [priereCount, setPriereCount] = useState(0);
-            // Liste des témoignages
-            const [temoins, setTemoins] = useState([
-                { id: 1, auteur: 'Maria', texte: 'J\'ai trouvé la paix intérieure ici 🙏' },
-                { id: 2, auteur: 'Jean', texte: 'Les méditations m\'ont transformé' },
-            ]);
-
-            // Fonction pour ajouter une prière
-            const ajouterPriere = () => setPriereCount(prev => prev + 1);
-
-            // Fonction pour ajouter un témoignage
-            const ajouterTemoin = (auteur, texte) => {
-                const newId = Date.now();
-                setTemoins(prev => [...prev, { id: newId, auteur, texte }]);
-            };
-
-            // Fonction pour supprimer un témoignage
-            const supprimerTemoin = (id) => {
-                setTemoins(prev => prev.filter(t => t.id !== id));
-            };
-
-            const contextValue = {
-                priereCount,
-                ajouterPriere,
-                temoins,
-                ajouterTemoin,
-                supprimerTemoin
-            };
-
-            return (
-                <AppContext.Provider value={contextValue}>
-                    <BrowserRouter>
-                        <Layout />
-                    </BrowserRouter>
-                </AppContext.Provider>
-            );
-        }
-
-        // ----- COMPOSANT LAYOUT (Header + Nav + Routes) -----
-        function Layout() {
-            const location = useLocation();
-            const navigate = useNavigate();
-
-            // Navigation via les boutons (sans Link pour éviter le rechargement)
-            const navItems = [
-                { path: '/', label: 'Accueil', icon: 'fa-home' },
-                { path: '/enseignements', label: 'Enseignements', icon: 'fa-feather-alt' },
-                { path: '/horaires', label: 'Horaires', icon: 'fa-clock' },
-                { path: '/contact', label: 'Contact', icon: 'fa-envelope' },
-            ];
-
-            return (
-                <>
-                    {/* HEADER */}
-                    <header>
-                        <div className="container">
-                            <div className="logo" onClick={() => navigate('/')}>
-                                <i className="fas fa-tree"></i> TEMPLO ÁRVORE DA VIDA
-                            </div>
-                            <div className="sous-titre">☯ Lumière, Amour & Éveil Spirituel ☯</div>
-                        </div>
-                    </header>
-
-                    {/* NAVIGATION REACT */}
-                    <nav>
-                        {navItems.map(item => (
-                            <button
-                                key={item.path}
-                                onClick={() => navigate(item.path)}
-                                className={location.pathname === item.path ? 'active' : ''}
-                            >
-                                <i className={`fas ${item.icon}`}></i> {item.label}
-                            </button>
-                        ))}
-                    </nav>
-
-                    {/* CONTENU PRINCIPAL */}
-                    <main className="container">
-                        <Routes>
-                            <Route path="/" element={<Accueil />} />
-                            <Route path="/enseignements" element={<Enseignements />} />
-                            <Route path="/horaires" element={<Horaires />} />
-                            <Route path="/contact" element={<Contact />} />
-                        </Routes>
-                    </main>
-
-                    {/* FOOTER */}
-                    <footer>
-                        <div className="container">
-                            <div className="social">
-                                <a href="#"><i className="fab fa-facebook-f"></i></a>
-                                <a href="#"><i className="fab fa-instagram"></i></a>
-                                <a href="#"><i className="fab fa-youtube"></i></a>
-                                <a href="#"><i className="fab fa-whatsapp"></i></a>
-                            </div>
-                            <p style={{ marginTop: '14px' }}>
-                                &copy; 2026 Templo Árvore da Vida — Que la lumière soit en vous.
-                                <i className="fas fa-heart" style={{ color: '#b8946a', marginLeft: '8px' }}></i>
-                            </p>
-                        </div>
-                    </footer>
-                </>
-            );
-        }
-
         // ============================================================
-        //  PAGE ACCUEIL (avec compteur interactif et témoignages)
+        // SCRIPT REACT COMPLET - BILINGUE PORTUGAIS / FRANÇAIS
         // ============================================================
-        function Accueil() {
-            const { priereCount, ajouterPriere, temoins, supprimerTemoin } = React.useContext(AppContext);
-            const [nouveauTemoin, setNouveauTemoin] = useState({ auteur: '', texte: '' });
-            const [showForm, setShowForm] = useState(false);
 
-            const handleAjouterTemoin = (e) => {
-                e.preventDefault();
-                if (nouveauTemoin.auteur.trim() && nouveauTemoin.texte.trim()) {
-                    ajouterTemoin(nouveauTemoin.auteur, nouveauTemoin.texte);
-                    setNouveauTemoin({ auteur: '', texte: '' });
-                    setShowForm(false);
-                }
-            };
+        const { useState, useEffect, useContext, createContext } = React;
+        const { BrowserRouter, Routes, Route, useNavigate, useLocation } = window.ReactRouterDOM;
 
-            return (
-                <div className="fade-in">
-                    {/* Bannière */}
-                    <div style={{
-                        background: 'linear-gradient(135deg, #e8dfd3 0%, #d4c5b2 100%)',
-                        padding: '40px 20px 35px',
-                        borderRadius: '20px',
-                        textAlign: 'center',
-                        marginBottom: '30px'
-                    }}>
-                        <h1 style={{ fontSize: '2.5rem', color: '#1a3a2b', fontWeight: '300' }}>
-                            <i className="fas fa-seedling" style={{ color: '#6a8f6a' }}></i> Bienvenue dans la Lumière
-                        </h1>
-                        <p style={{ fontSize: '1.2rem', maxWidth: '650px', margin: '12px auto 20px', color: '#2e241f' }}>
-                            Le <strong>Templo Árvore da Vida</strong> est un sanctuaire de paix, de méditation et de guérison.
-                            Nous célébrons la spiritualité sous toutes ses formes, dans le respect de la Terre et de l'Être.
-                        </p>
-                        <button className="btn" onClick={() => document.getElementById('contact-link')?.click()}>
-                            <i className="fas fa-hand-holding-heart"></i> Venez nous rencontrer
-                        </button>
-                    </div>
+        // ----- CONTEXTE GLOBAL -----
+        const AppContext = createContext();
 
-                    {/* COMPTEUR DE PRIÈRES (INTERACTIF) */}
-                    <div className="card compteur-box">
-                        <h3><i className="fas fa-praying-hands"></i> Compteur de Prières</h3>
-                        <div className="nombre">{priereCount}</div>
-                        <div className="btn-group">
-                            <button className="btn" onClick={ajouterPriere}>
-                                <i className="fas fa-plus"></i> Ajouter une prière
-                            </button>
-                            <button className="btn btn-outline" onClick={() => ajouterPriere()}>
-                                <i className="fas fa-heart"></i> +1
-                            </button>
-                        </div>
-                        <p style={{ marginTop: '10px', color: '#5a4a3f' }}>
-                            <i className="fas fa-users"></i> Chaque prière est une offrande d'amour
-                        </p>
-                    </div>
-
-                    {/* TÉMOIGNAGES (CRUD interactif) */}
-                    <div className="card">
-                        <h3>
-                            <i className="fas fa-comments"></i> Témoignages
-                            <span className="badge">{temoins.length}</span>
-                        </h3>
-
-                        {temoins.length === 0 ? (
-                            <p style={{ color: '#888', fontStyle: 'italic' }}>Aucun témoignage pour l'instant. Soyez le premier !</p>
-                        ) : (
-                            temoins.map(t => (
-                                <div key={t.id} className="temoin-item">
-                                    <div>
-                                        <strong>{t.auteur}</strong> : {t.texte}
-                                    </div>
-                                    <button onClick={() => supprimerTemoin(t.id)} title="Supprimer">
-                                        <i className="fas fa-trash-alt"></i>
-                                    </button>
-                                </div>
-                            ))
-                        )}
-
-                        <button className="btn btn-outline" style={{ marginTop: '16px' }} onClick={() => setShowForm(!showForm)}>
-                            <i className="fas fa-plus-circle"></i> {showForm ? 'Fermer' : 'Ajouter un témoignage'}
-                        </button>
-
-                        {showForm && (
-                            <form onSubmit={handleAjouterTemoin} style={{ marginTop: '18px' }}>
-                                <input
-                                    type="text"
-                                    placeholder="Votre nom"
-                                    value={nouveauTemoin.auteur}
-                                    onChange={(e) => setNouveauTemoin({ ...nouveauTemoin, auteur: e.target.value })}
-                                    required
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Votre témoignage ..."
-                                    value={nouveauTemoin.texte}
-                                    onChange={(e) => setNouveauTemoin({ ...nouveauTemoin, texte: e.target.value })}
-                                    required
-                                />
-                                <button type="submit" className="btn" style={{ width: '100%' }}>
-                                    <i className="fas fa-paper-plane"></i> Partager
-                                </button>
-                            </form>
-                        )}
-                    </div>
-                </div>
-            );
-        }
-
-        // ============================================================
-        //  PAGE ENSEIGNEMENTS
-        // ============================================================
-        function Enseignements() {
-            const enseignements = [
-                { icon: 'fa-spa', titre: 'Méditation', desc: 'Séances guidées pour apaiser le mental et retrouver l\'harmonie intérieure.' },
-                { icon: 'fa-hands-helping', titre: 'Guérison énergétique', desc: 'Pratiques de soin par les énergies, les cristaux et la nature.' },
-                { icon: 'fa-book-open', titre: 'Études spirituelles', desc: 'Cercles de lecture et réf
+        // ----- TRADUCTIONS -----
+        const TRADUCTIONS = {
+            fr: {
+                // Général
+                'site_title': 'Templo Árvore da Vida ⚡ Église Spirituelle',
+                'sous_titre': '☯ Lumière, Amour & Éveil Spirituel ☯',
+                'langue_fr': 'FR',
+                'langue_pt': 'PT',
+                
+                // Navigation
+                'nav_accueil': 'Accueil',
+                'nav_enseignements': 'Enseignements',
+                'nav_horaires': 'Horaires',
+                'nav_equipe': 'Équipe',
+                'nav_galerie': 'Galerie',
+                'nav_blog': 'Blog',
+                'nav_contact': 'Contact',
+                
+                // Accueil
+                'bienvenue': 'Bienvenue dans la Lumière',
+                'bienvenue_desc': 'Le <strong>Templo Árvore da Vida</strong> est un sanctuaire de paix, de méditation et de guérison. Nous célébrons la spiritualité sous toutes ses formes, dans le respect de la Terre et de l\'Être.',
+                'btn_rencontrer': 'Venez nous rencontrer',
+                'compteur_titre': 'Compteur de Prières',
+                'btn_ajouter_priere': 'Ajouter une prière',
+                'btn_plus': '+1',
+                'compteur_desc': 'Chaque prière est une offrande d\'amour',
+                'newsletter_titre': 'Recevez nos inspirations',
+                'newsletter_desc': 'Une méditation, un mantra, une pensée positive chaque semaine.',
+                'newsletter_placeholder': 'Votre email',
+                'newsletter_btn': "S'inscrire",
+                'newsletter_abonnes': 'abonnés',
+                'newsletter_desinscription': 'Désinscription facile',
+                'temoignages_titre': 'Témoignages',
+                'temoignages_vide': 'Aucun témoignage pour l\'instant.',
+                'btn_ajouter_temoin': 'Ajouter un témoignage',
+                'btn_fermer': 'Fermer',
+                'temoin_placeholder_nom': 
