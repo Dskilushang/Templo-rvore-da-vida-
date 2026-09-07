@@ -96,12 +96,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return `
       <div class="contact-form">
         <h3>${c.title}</h3>
-        <form id="contactForm">
-          <input type="text" placeholder="${c.nom}" required>
-          <input type="email" placeholder="${c.email}" required>
-          <textarea rows="4" placeholder="${c.message}"></textarea>
+        <form id="contactForm" action="https://formspree.io/f/xkjnqypy" method="POST" onsubmit="return handleContactSubmit(event)">
+          <input type="text" name="nom" placeholder="${c.nom}" required>
+          <input type="email" name="email" placeholder="${c.email}" required>
+          <textarea name="message" rows="4" placeholder="${c.message}" required></textarea>
           <button type="submit">${c.envoyer}</button>
         </form>
+        <div id="form-message" style="display:none; margin-top:15px; padding:12px; background:#d4edda; color:#155724; border-radius:6px;">
+          ✅ ${c.confirmation || 'Votre message a été envoyé avec succès !'}
+        </div>
         <p style="margin-top:15px;"><i class="fas fa-map-marker-alt"></i> ${c.adresse}</p>
         <p><i class="fas fa-phone"></i> ${c.telephone}</p>
       </div>
@@ -137,6 +140,49 @@ document.addEventListener('DOMContentLoaded', () => {
       ${data.annonces.map(a => `<div class="list-item"><i class="fas fa-bullhorn"></i> ${a}</div>`).join('')}
     `;
   }
+
+  // Gestion de l'envoi du formulaire de contact
+  window.handleContactSubmit = function(event) {
+    event.preventDefault();
+    const form = document.getElementById('contactForm');
+    const messageDiv = document.getElementById('form-message');
+    
+    if (messageDiv) {
+      messageDiv.style.display = 'block';
+    }
+    
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        if (messageDiv) {
+          messageDiv.style.background = '#d4edda';
+          messageDiv.style.color = '#155724';
+          messageDiv.textContent = '✅ ' + (translations[currentLang].contact.confirmation || 'Votre message a été envoyé avec succès !');
+        }
+        form.reset();
+        setTimeout(() => {
+          if (messageDiv) messageDiv.style.display = 'none';
+        }, 5000);
+      } else {
+        throw new Error('Erreur');
+      }
+    })
+    .catch(() => {
+      if (messageDiv) {
+        messageDiv.style.background = '#f8d7da';
+        messageDiv.style.color = '#721c24';
+        messageDiv.textContent = '❌ Une erreur est survenue. Veuillez réessayer.';
+        messageDiv.style.display = 'block';
+      }
+    });
+    return false;
+  };
 
   navItems.forEach(item => {
     item.addEventListener('click', function() {
