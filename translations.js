@@ -1,4 +1,4 @@
-// translations.js - Fichier de traduction FR/PT
+// translations.js
 const translations = {
   fr: {
     menu: {
@@ -44,7 +44,8 @@ const translations = {
       message: 'Message',
       envoyer: 'Envoyer',
       adresse: 'Angola, Bolingo',
-      telephone: '+244 999 999 999'
+      telephone: '+244 999 999 999',
+      confirmation: 'Votre message a été envoyé avec succès ! Nous vous répondrons bientôt.'
     },
     departements: { title: 'Liste des départements' },
     membres: { title: 'Tous les membres' },
@@ -97,7 +98,8 @@ const translations = {
       message: 'Mensagem',
       envoyer: 'Enviar',
       adresse: 'Angola, Bolingo',
-      telephone: '+244 999 999 999'
+      telephone: '+244 999 999 999',
+      confirmation: 'Sua mensagem foi enviada com sucesso! Responderemos em breve.'
     },
     departements: { title: 'Lista de departamentos' },
     membres: { title: 'Todos os membros' },
@@ -107,51 +109,27 @@ const translations = {
   }
 };
 
-// Variable globale pour la langue courante
 let currentLang = 'fr';
 
-// Fonction pour obtenir une traduction
 function t(key) {
   const keys = key.split('.');
   let result = translations[currentLang];
   for (let k of keys) {
-    if (result && result[k] !== undefined) {
-      result = result[k];
-    } else {
-      return key; // retourne la clé si non trouvée
-    }
+    if (result && result[k] !== undefined) result = result[k];
+    else return key;
   }
   return result;
 }
 
-// Fonction pour changer la langue
 function setLanguage(lang) {
   if (translations[lang]) {
     currentLang = lang;
     localStorage.setItem('preferredLanguage', lang);
-    
-    // Mettre à jour l'interface
     const activePage = document.querySelector('#sidebar nav ul li.active');
-    if (activePage) {
-      showPage(activePage.dataset.page);
-    } else {
-      showPage('dashboard');
-    }
-    
-    // Mettre à jour les boutons
+    if (activePage) showPage(activePage.dataset.page);
+    else showPage('dashboard');
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
   }
-}
-
-// Restaurer la langue préférée au chargement
-document.addEventListener('DOMContentLoaded', function() {
-  const savedLang = localStorage.getItem('preferredLanguage');
-  if (savedLang && translations[savedLang]) {
-    currentLang = savedLang;
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === currentLang);
-    });
-  }
-});
+      }
