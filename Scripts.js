@@ -141,6 +141,114 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
+  // ---------- Gestion du formulaire de contact ----------
+  window.handleContactSubmit = function(event) {
+    event.preventDefault();
+    const form = document.getElementById('contactForm');
+    const messageDiv = document.getElementById('form-message');
+    
+    if (messageDiv) {
+      messageDiv.style.display = 'block';
+    }
+    
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        if (messageDiv) {
+          messageDiv.style.background = '#d4edda';
+          messageDiv.style.color = '#155724';
+          messageDiv.textContent = '✅ ' + (translations[currentLang].contact.confirmation || 'Votre message a été envoyé avec succès !');
+        }
+        form.reset();
+        setTimeout(() => {
+          if (messageDiv) messageDiv.style.display = 'none';
+        }, 5000);
+      } else {
+        throw new Error('Erreur');
+      }
+    })
+    .catch(() => {
+      if (messageDiv) {
+        messageDiv.style.background = '#f8d7da';
+        messageDiv.style.color = '#721c24';
+        messageDiv.textContent = '❌ Une erreur est survenue. Veuillez réessayer.';
+        messageDiv.style.display = 'block';
+      }
+    });
+    return false;
+  };
+
+  // ---------- Navigation ----------
+  navItems.forEach(item => {
+    item.addEventListener('click', function() {
+      navItems.forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+      showPage(this.dataset.page);
+    });
+  });
+
+  // ---------- Gestion de la déconnexion ----------
+  window.logout = function() {
+    sessionStorage.removeItem('isLoggedIn');
+    window.location.href = 'login.html';
+  };
+
+  const logoutLink = document.querySelector('.bottom-links a:last-child');
+  if (logoutLink) {
+    logoutLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
+        logout();
+      }
+    });
+  }
+
+  // ---------- Page par défaut ----------
+  showPage('dashboard');
+});          ✅ ${c.confirmation || 'Votre message a été envoyé avec succès !'}
+        </div>
+        <p style="margin-top:15px;"><i class="fas fa-map-marker-alt"></i> ${c.adresse}</p>
+        <p><i class="fas fa-phone"></i> ${c.telephone}</p>
+      </div>
+    `;
+  }
+
+  function renderDepartements() {
+    return `
+      <div class="section-title">${t('departements.title')}</div>
+      ${data.departements.map(d => `<div class="list-item"><i class="fas fa-users"></i> ${d}</div>`).join('')}
+    `;
+  }
+
+  function renderMembres() {
+    return `
+      <div class="section-title">${t('membres.title')}</div>
+      ${data.membres.map(m => `
+        <div class="list-item"><span>${m.nom}</span> <span style="font-size:14px;color:#777;">${m.departement}</span></div>
+      `).join('')}
+    `;
+  }
+
+  function renderRapports() {
+    return `
+      <div class="section-title">${t('rapports.title')}</div>
+      ${data.rapports.map(r => `<div class="list-item"><i class="fas fa-file-pdf"></i> ${r}</div>`).join('')}
+    `;
+  }
+
+  function renderAnnonces() {
+    return `
+      <div class="section-title">${t('annonces.title')}</div>
+      ${data.annonces.map(a => `<div class="list-item"><i class="fas fa-bullhorn"></i> ${a}</div>`).join('')}
+    `;
+  }
+
   // Gestion de l'envoi du formulaire de contact
   window.handleContactSubmit = function(event) {
     event.preventDefault();
