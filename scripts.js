@@ -1,4 +1,4 @@
-// Scripts.js
+// scripts.js
 document.addEventListener('DOMContentLoaded', () => {
 
   const navItems = document.querySelectorAll('#sidebar nav ul li');
