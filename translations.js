@@ -112,11 +112,14 @@ const translations = {
 let currentLang = 'fr';
 
 function t(key) {
-  const keys = key.split('.');
-  let result = translations[currentLang];
-  for (let k of keys) {
-    if (result && result[k] !== undefined) result = result[k];
-    else return key;
+  var keys = key.split('.');
+  var result = translations[currentLang];
+  for (var i = 0; i < keys.length; i++) {
+    if (result && result[keys[i]] !== undefined) {
+      result = result[keys[i]];
+    } else {
+      return key;
+    }
   }
   return result;
 }
@@ -125,11 +128,15 @@ function setLanguage(lang) {
   if (translations[lang]) {
     currentLang = lang;
     localStorage.setItem('preferredLanguage', lang);
-    const activePage = document.querySelector('#sidebar nav ul li.active');
-    if (activePage) showPage(activePage.dataset.page);
-    else showPage('dashboard');
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === lang);
-    });
+    var activePage = document.querySelector('#sidebar nav ul li.active');
+    if (activePage) {
+      showPage(activePage.dataset.page);
+    } else {
+      showPage('dashboard');
+    }
+    var btns = document.querySelectorAll('.lang-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('active', btns[i].dataset.lang === lang);
+    }
   }
-      }
+        }
