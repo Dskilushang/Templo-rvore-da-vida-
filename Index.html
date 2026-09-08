@@ -8,13 +8,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+
   <!-- Vérification de la session admin -->
   <script>
-    // Si l'utilisateur n'est pas connecté, le rediriger vers la page de connexion
     if (sessionStorage.getItem('isLoggedIn') !== 'true') {
       window.location.href = 'login.html';
     }
   </script>
+
+  <!-- ===== SIDEBAR ===== -->
   <aside id="sidebar">
     <div class="logo">
       <h2>Templo</h2>
@@ -38,6 +40,7 @@
     </div>
   </aside>
 
+  <!-- ===== CONTENU PRINCIPAL ===== -->
   <main id="main-content">
     <header>
       <h1 id="page-title">Tableau de bord</h1>
@@ -53,8 +56,22 @@
     <section id="content-area"></section>
   </main>
 
+  <!-- ===== SCRIPTS ===== -->
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    // Configuration Supabase (vos informations)
+    const SUPABASE_URL = "https://fticplakkqyyyahnbqng.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_Ncg05nIR1EqosVpq_BHmAg_BeHA5avS";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+
+  <!-- Traductions -->
   <script src="translations.js"></script>
-  <script src="data.js"></script>
+
+  <!-- Logique du site (version Supabase) -->
   <script src="Scripts.js"></script>
+
 </body>
-  </html>
+</html>
